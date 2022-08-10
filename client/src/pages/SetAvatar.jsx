@@ -26,22 +26,24 @@ const SetAvatar = () => {
   };
 
   const setProfilePicture = async () => {
-    if (selectedAvatar === undefined) {
-      toast.error("Please select an avatar", toastOptions);
-    } else {
+    if (selectedAvatar !== undefined) {
       const user = await JSON.parse(localStorage.getItem("chat-app-user"));
       const { data } = await axios.post(`${setAvatarRoute}/${user._id}`, {
         image: avatars[selectedAvatar],
       });
-      console.log(data);
       if (data.isSet) {
-        user.isAvatarImageSet = true;
-        user.avatarImage = data.image;
-        localStorage.setItem("chat-app-user", JSON.stringify(user));
+        const updatedUser = {
+          ...user,
+          isAvatarImageSet: true,
+          avatarImage: data.image,
+        };
+        localStorage.setItem("chat-app-user", JSON.stringify(updatedUser));
         navigate("/");
       } else {
         toast.error("Error setting avatar. Please try again", toastOptions);
       }
+    } else {
+      toast.error("Please select an avatar", toastOptions);
     }
   };
 
@@ -64,7 +66,7 @@ const SetAvatar = () => {
     if (!localStorage.getItem("chat-app-user")) {
       navigate("/login");
     }
-    if (!JSON.parse(localStorage.getItem("avatars"))) {
+    if (!localStorage.getItem("avatars")) {
       fetchImages();
     }
     return () => {
