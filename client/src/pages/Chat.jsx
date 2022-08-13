@@ -54,7 +54,7 @@ const Chat = () => {
         {isLoaded && !currentChat ? (
           <Wellcome currentUser={currentUser} />
         ) : (
-          <ChatContainer currentChat={currentChat} />
+          <ChatContainer currentChat={currentChat} currentUser={currentUser} />
         )}
       </div>
     </Container>

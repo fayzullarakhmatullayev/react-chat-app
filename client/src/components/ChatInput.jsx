@@ -21,7 +21,9 @@ const ChatInput = ({ handleSendMessage }) => {
     <Container>
       <div className="button-container">
         <div className="emoji">
-          <BsEmojiSmileFill onClick={() => setShowEmojiPicker((pre) => !pre)} />
+          <BsEmojiSmileFill
+            onClick={() => setShowEmojiPicker((prev) => !prev)}
+          />
           {showEmojiPicker && (
             <Picker
               onEmojiClick={(e, { emoji }) => setMsg((prev) => (prev += emoji))}
