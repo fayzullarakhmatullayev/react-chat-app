@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import styled from "styled-components";
 import Logo from "../assets/logo.svg";
 
-const Contacts = ({ contacts, currentUser }) => {
+const Contacts = ({ contacts, currentUser, changeChat }) => {
   const [currentUserName, setCurrentUserName] = useState(undefined);
   const [currentUserImage, setCurrentUserImage] = useState(undefined);
   const [currentSelected, setCurrentSelected] = useState(undefined);
@@ -15,7 +15,10 @@ const Contacts = ({ contacts, currentUser }) => {
     }
   }, [currentUser]);
 
-  const changeCurrentChat = (idx, contact) => {};
+  const changeCurrentChat = (idx, contact) => {
+    setCurrentSelected(idx);
+    changeChat(contact);
+  };
   return (
     <>
       {currentUserImage && currentUserName && (
@@ -31,6 +34,7 @@ const Contacts = ({ contacts, currentUser }) => {
                   idx === currentSelected ? "selected" : ""
                 }`}
                 key={`contact_${idx}`}
+                onClick={() => changeCurrentChat(idx, contact)}
               >
                 <div className="avatar">
                   <img
