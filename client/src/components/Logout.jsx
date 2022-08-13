@@ -2,12 +2,18 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { BiPowerOff } from "react-icons/bi";
+import { logoutRoute } from "../utils/APIRoutes";
+import axios from "axios";
 
 const Logout = () => {
   const navigate = useNavigate();
   const handleClick = async () => {
-    localStorage.clear();
-    navigate("/login");
+    const id = await JSON.parse(localStorage.getItem("chat-app-user"))._id;
+    const data = await axios.get(`${logoutRoute}/${id}`);
+    if (data.status === 200) {
+      localStorage.clear();
+      navigate("/login");
+    }
   };
 
   return (

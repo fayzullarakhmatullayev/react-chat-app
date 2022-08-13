@@ -2,14 +2,24 @@ import MessageModel from "../model/messageModel.js";
 
 export const addMessage = async (req, res, next) => {
   try {
-    const { from, to, message } = req.body;
-    const data = await MessageModel.create({
-      message: { text: message },
-      users: [from, to],
-      sender: from,
+    const { from, to } = req.body;
+
+    const messages = await MessageModel.find({
+      users: {
+        $all: [from, to],
+      },
+    }).sort({ updatedAt: 1 });
+
+    const projectedMessages = messages.map((msg) => {
+      console.log(msg);
+      return {
+        fromSelf: msg.sender.toString() === from,
+        message: msg.message.text,
+        createdAt: msg.createdAt,
+      };
     });
-    if (data) return res.json({ message: "Message added successfully!" });
-    return res.json({ message: "Failed to add message to the database!" });
+
+    return res.json(projectedMessages);
   } catch (error) {
     next(error);
   }
